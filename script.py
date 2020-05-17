@@ -9,11 +9,11 @@ import numpy as np
 import cv2
 from matplotlib import pyplot as plt
 
-# img_path = r'./images/dint_geocode.png'
+# img_path = r'./images/dint_geocode1.png'
 # im = plt.imread(img_path)
 # im = cv2.imread(r'images\car.png')
 # im = cv2.imread(r'images\laneseg.jpg')
-# im = cv2.imread(r'images\20180718-20180724\dint_geocode.png')
+# im = cv2.imread(r'images\20180718-20180724\dint_geocode1.png')
 
 image = cv2.imread(r'images\dint_geocode.png')
 label = cv2.imread(r'images\label.png', cv2.IMREAD_GRAYSCALE)
