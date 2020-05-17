@@ -7,8 +7,11 @@
 import cv2, math, os
 import numpy as np
 
-img_path = r'./images/dint_geocode.png'
-lab_path = r'./images/label.png'
+# img_path = r'./images/dint_geocode.png'
+img_path = r'images/20180805-20180823/dint_geocode.png'
+# lab_path = r'./images/label.png'
+# lab_path = r'H:/ZQ_file/Sar_seg/new_labels/dint_geocode_mask.png'
+lab_path = r'H:/ZQ_file/Sar_seg/new_labels/dint_geocode_mask1.png'
 img = cv2.imread(img_path)
 lab = cv2.imread(lab_path, cv2.IMREAD_GRAYSCALE)
 image = img.copy()
@@ -60,10 +63,10 @@ def show_roi_grid(img, list):
     cv2.imshow("image", img)
     ROI_path = 'ROI'
     ROI_list = os.listdir(ROI_path)
-    if len(ROI_list):
-        for i in range(len(ROI_list)):
-            os.remove(os.path.join(ROI_path, ROI_list[i]))
-    cv2.imwrite('./ROI/Whole_ROI.png', img)
+    # if len(ROI_list):
+    #     for i in range(len(ROI_list)):
+    #         os.remove(os.path.join(ROI_path, ROI_list[i]))
+    cv2.imwrite('./ROI/Whole_ROI2.png', img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
@@ -72,8 +75,15 @@ def show_roi_grid(img, list):
 show_roi_grid(img, list)
 
 # remove images and labels reserved
-img_path = './sar_images/'
-lab_path = './sar_labels/'
+# img_path = './sar_images/'
+# lab_path = './sar_labels/'
+img_path = './sar_images2/'
+lab_path = './sar_labels2/'
+if not os.path.exists(img_path):
+    os.makedirs(img_path)
+if not os.path.exists(lab_path):
+    os.makedirs(lab_path)
+
 img_list = os.listdir(img_path)
 lab_list = os.listdir(lab_path)
 
@@ -88,7 +98,8 @@ else:
     print('No images')
 
 # slice and save images
-i, sum = 0, 0
+# i, sum = 0, 0
+i, sum = 1377, 2723
 # ROI_length = 112
 ROI_length = 96
 # ROI_length = 32
@@ -108,8 +119,8 @@ for num in range(int(len(list) * 0.25)):
                 if np.sum(lab1) != 38 * lab1.size:
                     i += 1
                     coordinate.append((column, row, column + ROI_length, row + ROI_length))
-                    cv2.imwrite('./sar_images/image_{}.png'.format(i), img1)
-                    cv2.imwrite('./sar_labels/label_{}.png'.format(i), lab1)
+                    cv2.imwrite(os.path.join(img_path, 'image_{}.png'.format(i)), img1)
+                    cv2.imwrite(os.path.join(lab_path, 'label_{}.png'.format(i)), lab1)
                 else:
                     # print(np.sum(lab1))
                     # print('label全是38')
@@ -130,6 +141,6 @@ for i in range(len(coordinate)):
     cv2.imshow("image", img)
     cv2.rectangle(img, (x1, y1), (x2, y2), (0, 0, 255), 3)
 print(len(coordinate))
-cv2.imwrite('./ROI/Detail_ROI.png', img)
+cv2.imwrite('./ROI/Detail_ROI2.png', img)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
