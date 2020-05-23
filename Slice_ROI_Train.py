@@ -8,6 +8,8 @@ import cv2, math, os
 import numpy as np
 
 img_path = r'images/20180718-20180724/dint_geocode.png'
+img_path1 = r'images/20180718-20180724/coh_geocode.png'
+# img_path1 = None
 lab_path = r'./images/label.png'
 # img_path = r'images/20180805-20180823/dint_geocode1.png'
 # lab_path = r'./images/label1.png'
@@ -18,6 +20,9 @@ lab = cv2.imread(lab_path, cv2.IMREAD_GRAYSCALE)
 img_name = os.path.split(img_path)[1]
 image = img.copy()
 label = lab.copy()
+if img_path1:
+    img1 = cv2.imread(img_path1)
+    image1 = img1.copy()
 list = []
 
 
@@ -71,54 +76,77 @@ def show_roi_grid(img, list):
     # cv2.imwrite('./ROI/Whole_ROI_{}'.format(img_name), img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+    return list
 
 
 # get ROI and cooridinate list
-show_roi_grid(img, list)
+ROI_coordinate_list = show_roi_grid(img, list)
 
-# remove images and labels reserved
-# img_path = './sar_images/image2/whole'
-# lab_path = './sar_labels/label2/whole'
-img_path = './sar_images/image3/part'
-lab_path = './sar_labels/label3/part'
-# img_path = './sar_images2/'
-# lab_path = './sar_labels2/'
-if not os.path.exists(img_path):
-    os.makedirs(img_path)
-if not os.path.exists(lab_path):
-    os.makedirs(lab_path)
+# img_save_path = './sar_images/image2/whole'
+# lab_save_path = './sar_labels/label2/whole'
+# img_save_path1 = './sar_images/image2/whole'
+# lab_save_path1 = './sar_labels/label2/whole'
 
-img_list = os.listdir(img_path)
-lab_list = os.listdir(lab_path)
+img_save_path = './sar_images/image3/part'
+lab_save_path = './sar_labels/label3/part'
+img_save_path1 = './sar_images/image3/part'
+lab_save_path1 = './sar_labels/label3/part'
+# make save dir
+if not os.path.exists(img_save_path):
+    os.makedirs(img_save_path)
+if not os.path.exists(lab_save_path):
+    os.makedirs(lab_save_path)
 
+img_list = os.listdir(img_save_path)
+lab_list = os.listdir(lab_save_path)
+
+# remove images before
 if len(img_list):
     for i in range(len(img_list)):
-        os.remove(os.path.join(img_path, img_list[i]))
-        os.remove(os.path.join(lab_path, lab_list[i]))
+        os.remove(os.path.join(img_save_path, img_list[i]))
+        os.remove(os.path.join(lab_save_path, lab_list[i]))
     print('Removed {} piece of images in sar_images dir'.format(len(img_list)))
     print('Removed {} piece of images in sar_labels dir'.format(len(lab_list)))
 
 else:
     print('No images')
 
+if img_path1:
+    # make save dir
+    if not os.path.exists(img_save_path1):
+        os.makedirs(img_save_path1)
+    if not os.path.exists(lab_save_path1):
+        os.makedirs(lab_save_path1)
+    img_list1 = os.listdir(img_save_path1)
+    lab_list1 = os.listdir(lab_save_path1)
+    # remove images before
+    if len(img_list1):
+        for i in range(len(img_list1)):
+            os.remove(os.path.join(img_save_path1, img_list1[i]))
+            os.remove(os.path.join(lab_save_path1, lab_list1[i]))
+        print('Removed {} piece of images in sar_images dir'.format(len(img_list1)))
+        print('Removed {} piece of images in sar_labels dir'.format(len(lab_list1)))
+
+    else:
+        print('No images')
+
 # slice and save images
-i, sum = 0, 0
-# i, sum = 452, 1697
+# i, sum = 0, 0
+i, sum = 560, 2875
 ROI_length = 256
 # ROI_length = 112
 # ROI_length = 96
-# ROI_length = 64
-# ROI_length = 32
 coordinate = []
 for num in range(int(len(list) * 0.25)):
     num = num * 4
     x1, y1, x2, y2 = list[num], list[num + 1], list[num + 2], list[num + 3]
 
-    for row in range(y1, y2, 30):
-        for column in range(x1, x2, 30):
+    for row in range(y1, y2, 25):
+        for column in range(x1, x2, 25):
             img1 = image[row:row + ROI_length, column:column + ROI_length]
             lab1 = label[row:row + ROI_length, column:column + ROI_length]
-
+            if img_path1:
+                img2 = image1[row:row + ROI_length, column:column + ROI_length]
             sum += 1
             if np.sum(lab1):
                 # if np.sum(lab1) > 38 * lab1.size * 0.165 and np.sum(lab1) < 38 * lab1.size * 0.5: # 112
@@ -126,8 +154,11 @@ for num in range(int(len(list) * 0.25)):
                 # if np.sum(lab1) > 38 * lab1.size * 0.2 and np.sum(lab1) < 38 * lab1.size * 0.8:  # 256 whole
                     i += 1
                     coordinate.append((column, row, column + ROI_length, row + ROI_length))
-                    cv2.imwrite(os.path.join(img_path, 'image_{}.png'.format(i)), img1)
-                    cv2.imwrite(os.path.join(lab_path, 'label_{}.png'.format(i)), lab1)
+                    cv2.imwrite(os.path.join(img_save_path, 'image_dint_{}.png'.format(i)), img1)
+                    cv2.imwrite(os.path.join(lab_save_path, 'label_dint_{}.png'.format(i)), lab1)
+                    if img_path1:
+                        cv2.imwrite(os.path.join(img_save_path1, 'image_coh_{}.png'.format(i)), img2)
+                        cv2.imwrite(os.path.join(lab_save_path1, 'label_coh_{}.png'.format(i)), lab1)
 
                 else:
                     # print(np.sum(lab1))

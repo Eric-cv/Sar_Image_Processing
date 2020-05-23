@@ -6,33 +6,33 @@
 # @Software :PyCharm
 
 import numpy as np
-import cv2
+import cv2, torch
 from matplotlib import pyplot as plt
+import imgaug as iaa
 
-# img_path = r'./images/dint_geocode1.png'
-# im = plt.imread(img_path)
-# im = cv2.imread(r'images\car.png')
-# im = cv2.imread(r'images\laneseg.jpg')
-# im = cv2.imread(r'images\20180718-20180724\dint_geocode1.png')
+img_path1 = r'images/20180718-20180724/dint_geocode.png'
+img_path2 = r'images/20180718-20180724/coh_geocode.png'
 
-image = cv2.imread(r'images\dint_geocode.png')
-label = cv2.imread(r'images\label.png', cv2.IMREAD_GRAYSCALE)
+img1 = cv2.imread(img_path1)
+img2 = cv2.imread(img_path2)
+print(img1.shape, img2.shape)
+img = np.dstack((img1, img2))
+print(img.shape)
 
-# plt.figure(figsize=(100, 80), dpi=80)
-# plt.imshow(im)
-# plt.xticks(range(0, 3200, 100))
-# plt.yticks(range(0, 2200, 100))
-# plt.grid(alpha=5)
-# plt.show()
 
-# print(type(im), im.shape, im.dtype)
-# cv2.namedWindow('mask', cv2.WINDOW_NORMAL)
-# cv2.imshow('mask', mask)
+# img = np.stack((img1, img2), axis=3)
+# print(img.shape)
+# print(img1_tensor.shape)
+
 # cv2.namedWindow('image', cv2.WINDOW_NORMAL)
-# cv2.imshow('image', im)
-# # cv2.imshow('image', image)
+# cv2.imshow('image', img)
 # cv2.waitKey(0)
 # cv2.destroyAllWindows()
+
+# test stack
+# a = np.ones((2,4,3))
+# b = np.full((2,4,3), 2)
+# c = np.dstack((a,b))
 
 '''
 # c h w

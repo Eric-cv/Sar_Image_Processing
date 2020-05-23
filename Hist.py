@@ -8,7 +8,6 @@
 import cv2
 from matplotlib import pyplot as plt
 
-# img_path = r'images/cat.jpg'
 img_path1 = r'images/20180718-20180724/dint_geocode.png'
 img_path2 = r'images/20180718-20180724/coh_geocode.png'
 
